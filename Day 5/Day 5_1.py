@@ -14,7 +14,6 @@ def runOpcodeProgramm(opcodeProgramm):
 	while(position <= len(opcodeProgramm)):
 		currentOpcode = str(opcodeProgramm[position])
 		rightMostDigit = int(currentOpcode[len(currentOpcode) - 1])
-		print(rightMostDigit)
 
 		if rightMostDigit == 1:
 			position = additionMode(position, opcodeProgramm)
@@ -25,10 +24,10 @@ def runOpcodeProgramm(opcodeProgramm):
 		elif rightMostDigit == 3:
 			position = inputMode(position, opcodeProgramm)
 
-		elif currentOpcode == 4:
+		elif rightMostDigit == 4:
 			position = outputMode(position, opcodeProgramm)
 
-		elif currentOpcode == 99:
+		elif opcodeProgramm[position] == 99:
 			print("End Point reached!")
 			break
 
@@ -39,14 +38,60 @@ def runOpcodeProgramm(opcodeProgramm):
 	return opcodeProgramm
 
 def additionMode(position, opcodeProgramm):
-	opcodeProgramm[opcodeProgramm[position+3]] = opcodeProgramm[opcodeProgramm[position+1]] + opcodeProgramm[opcodeProgramm[position+2]]
-	position += 4
-	return position
+	opcodeInstruction = str(opcodeProgramm[position])
+
+	if len(opcodeInstruction) == 1:
+		opcodeProgramm[opcodeProgramm[position+3]] = opcodeProgramm[opcodeProgramm[position+1]] + opcodeProgramm[opcodeProgramm[position+2]]
+		position += 4
+		return position
+	elif len(opcodeInstruction) == 3:
+		opcodeProgramm[opcodeProgramm[position+3]] = opcodeProgramm[position+1] + opcodeProgramm[opcodeProgramm[position+2]]
+		position += 4
+		return position
+	elif len(opcodeInstruction) == 4:
+		if int(opcodeInstruction[0]) == 1 and int(opcodeInstruction[1]) == 0: 
+			opcodeProgramm[opcodeProgramm[position+3]] = opcodeProgramm[opcodeProgramm[position+1]] + opcodeProgramm[position+2]
+			position += 4
+			return position
+		elif int(opcodeInstruction[0]) == 1 and int(opcodeInstruction[1]) == 1:
+			opcodeProgramm[opcodeProgramm[position+3]] = opcodeProgramm[position+1] + opcodeProgramm[position+2]
+			position += 4
+			return position
+		else:
+			print("no vailid code")
+			opcodeProgramm[opcodeProgramm[position+3]] = opcodeProgramm[position+1] + opcodeProgramm[position+2]
+			position += 4
+			return position
+	else:
+		return position+1
+
 
 def multiplicationMode(position, opcodeProgramm):
-	opcodeProgramm[opcodeProgramm[position+3]] = opcodeProgramm[opcodeProgramm[position+1]] * opcodeProgramm[opcodeProgramm[position+2]]
-	position += 4
-	return position
+	opcodeInstruction = str(opcodeProgramm[position])
+
+	if len(opcodeInstruction) == 1:
+		opcodeProgramm[opcodeProgramm[position+3]] = opcodeProgramm[opcodeProgramm[position+1]] * opcodeProgramm[opcodeProgramm[position+2]]
+		position += 4
+		return position
+	elif len(opcodeInstruction) == 3:
+		opcodeProgramm[opcodeProgramm[position+3]] = opcodeProgramm[position+1] * opcodeProgramm[opcodeProgramm[position+2]]
+		position += 4
+		return position
+	elif len(opcodeInstruction) == 4:
+		if int(opcodeInstruction[0]) == 1 and int(opcodeInstruction[1]) == 0: 
+			opcodeProgramm[opcodeProgramm[position+3]] = opcodeProgramm[opcodeProgramm[position+1]] * opcodeProgramm[position+2]
+			position += 4
+			return position
+		elif int(opcodeInstruction[0]) == 1 and int(opcodeInstruction[1]) == 1: 
+			opcodeProgramm[opcodeProgramm[position+3]] = opcodeProgramm[position+1] * opcodeProgramm[position+2]
+			position += 4
+			return position
+		else:
+			print("no vailid code")
+			position += 4
+			return position
+	else:
+		return position+1
 
 def inputMode(position, opcodeProgramm):
 	opcodeProgramm[opcodeProgramm[position+1]]= 1
@@ -54,9 +99,20 @@ def inputMode(position, opcodeProgramm):
 	return position
 
 def outputMode(position, opcodeProgramm):
-	outputValue = opcodeProgramm[opcodeProgramm[position+1]]
-	position += 2
-	print(outputValue)
-	return position
+	opcodeInstruction = str(opcodeProgramm[position])
+
+	if len(opcodeInstruction) == 1:
+		outputValue = opcodeProgramm[opcodeProgramm[position+1]]
+		position += 2
+		print(outputValue)
+		return position
+	elif len(opcodeInstruction) == 3:
+		outputValue = opcodeProgramm[position+1]
+		position += 2
+		print(outputValue)
+		return position
+	else:
+		return position+1
+	
 
 main()
