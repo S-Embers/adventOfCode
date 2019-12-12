@@ -19,7 +19,8 @@ def main():
 	
 	print(orbitCount)
 
-	sharedParent = searchForFirstSharedOrbit("YOU","SAN",planetList)
+	startPlanet, endPlanet, sharedParents = searchForSharedOrbit("YOU","SAN",planetList)
+	calculateShortestDistance(startPlanet, endPlanet, sharedParents)
 
 def registerPlanets():
 	inputOrbits = open("input_Day6.txt", "r")
@@ -57,7 +58,7 @@ def registerPlanets():
 	inputOrbits.close()
 	return planets
 
-def searchForFirstSharedOrbit(startPlanet,endPlanet,planetList):
+def searchForSharedOrbit(startPlanet,endPlanet,planetList):
 	start = None
 	end = None
 
@@ -73,7 +74,7 @@ def searchForFirstSharedOrbit(startPlanet,endPlanet,planetList):
 	endPlanetParents = getAllParents(end, endPlanetParents)
 
 	sharedParents = startPlanetParents&endPlanetParents
-	print(sharedParents)
+	return start, end, sharedParents
 
 
 def getAllParents(childPlanet, allParents):
@@ -84,6 +85,21 @@ def getAllParents(childPlanet, allParents):
 
 	return allParents
 
+def calculateShortestDistance(startPlanet, endPlanet, sharedParents):
+	shortestDistance = 999999
+	for planet in sharedParents:
+		distance = calculatePlanetDistance(startPlanet, planet, 0)
+		distance += calculatePlanetDistance(endPlanet, planet, 0)
+		if distance < shortestDistance:
+			shortestDistance = distance
 
+	print(shortestDistance - 2)
 
+def calculatePlanetDistance(startPlanet, destinationPlanet, distance):
+	parentPlanet = startPlanet.parent
+	if parentPlanet == destinationPlanet:
+		return distance + 1
+
+	distance += calculatePlanetDistance(parentPlanet, destinationPlanet, distance) + 1
+	return distance
 main()
